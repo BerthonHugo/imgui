@@ -127,6 +127,13 @@
 #pragma GCC diagnostic ignored "-Wcast-function-type"       // warning: cast between incompatible function types (for loader)
 #endif
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///   INFO : custom loader definition
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#include <glad/glad.h>
+
 // GL includes
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #if (defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV))
