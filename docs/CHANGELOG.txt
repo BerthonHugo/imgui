@@ -78,12 +78,15 @@ Other changes:
 - Tables: Fixed bottom-most and right-most outer border offset by one. (#6765, #3752) [@v-ein]
 - Tables: Fixed top-most outer border being drawn with both TableBorderLight and TableBorderStrong
   in some situations, causing the earlier to be visible underneath when alpha is not 1.0f.
+- TabBar: Fixed position of unsaved document marker (ImGuiTabItemFlags_UnsavedDocument) which was
+  accidentally offset in 1.89.9. (#6862) [@alektron]
 - Fonts: 'float size_pixels' passed to AddFontXXX() functions is now rounded to lowest integer.
   This is because our layout/font system currently doesn't fully support non-integer sizes. Until
   it does, this has been a common pitfall leading to more or less subtle issues. (#3164, #3309, #6800)
 - Fonts: Better assert during load when passing truncated font data or wrong data size. (#6822)
 - Fonts: Ensure calling AddFontXXX function doesn't invalidates ImFont's ConfigData pointers
   prior to building again. (#6825)
+- Fonts, imgui_freetype: Fixed a warning and leak in IMGUI_ENABLE_FREETYPE_LUNASVG support. (#6842, #6591)
 - InputTextMultiline: Fixed a crash pressing Down on last empty line of a multiline buffer.
   (regression from 1.89.2, only happened in some states). (#6783, #6000)
 - InputTextMultiline: Fixed Tabbing cycle leading to a situation where Enter key wouldn't
@@ -92,11 +95,28 @@ Other changes:
 - MenuBar: Fixed an issue where layouting an item in the menu-bar would erroneously
   register contents size in a way that would affect the scrolling layer.
   Was most often noticable when using an horizontal scrollbar. (#6789)
+- Misc: Most text functions also treat "%.*s" (along with "%s") specially to avoid formatting. (#3466, #6846)
+- IO: Setting io.WantSetMousePos ignores incoming MousePos events. (#6837, #228) [@bertaye]
 - ImDrawList: Added AddEllipse(), AddEllipseFilled(), PathEllipticalArcTo(). (#2743) [@Doohl]
 - ImVector: Added find_index() helper.
 - Backends: GLFW: Clear emscripten's MouseWheel callback before shutdown. (#6790, #6096, #4019) [@halx99]
 - Backends: Win32: Added support for keyboard codepage conversion for when application
   is compiled in MBCS mode and using a non-Unicode window. (#6785, #6782, #5725, #5961) [@sneakyevil]
+- Backends: Win32: Synthesize key-down event on key-up for VK_SNAPSHOT / ImGuiKey_PrintScreen as Windows
+  doesn't emit it (same behavior as GLFW/SDL). (#6859) [@thedmd, @SuperWangKai]
+- Internals: Renamed ImFloor() to ImTrunc(). Renamed ImFloorSigned() to ImFloor(). (#6861)
+
+Docking+Viewports Branch:
+
+- Viewports: Fixed window inner clipping rectangle off by one when window is located on a monitor
+  with negative coordinates. While it is expected that other small issues with arise from this
+  situation, at the moment we are fixing the most noticeable one. (#6861, #2884) [@Vuhdo, @alektron]
+- Docking: Fixed an issue leading to incorrect restoration of selected tab in dock nodes that
+  don't carry the currently focused window. (#2304)
+- Docking: added ImGuiDockNodeFlags_NoUndocking. (#2999, #6823, #6780, #3492)
+- Docking: renamed ImGuiDockNodeFlags_NoSplit to ImGuiDockNodeFlags_NoDockingSplit.
+- Docking: renamed ImGuiDockNodeFlags_NoDockingInCentralNode to ImGuiDockNodeFlags_NoDockingOverCentralNode.
+- Docking: Internals: renamed ImGuiDockNodeFlags_NoDockingSplitMe to ImGuiDockNodeFlags_NoDockingSplit.
 
 
 -----------------------------------------------------------------------
@@ -122,6 +142,8 @@ Other changes:
 - Windows: Layout of Close/Collapse buttons uses style.ItemInnerSpacing.x between items,
   stopped incorrectly using FramePadding in a way where hit-boxes could overlap when
   setting large values. (#6749)
+- TabBar, Style: added style.TabBarBorderSize and associated ImGuiStyleVar_TabBarBorderSize.
+  Tweaked rendering of that separator to allow thicker values. (#6820, #4859, #5022, #5239)
 - InputFloat, SliderFloat, DragFloat: always turn both '.' and ',' into the current decimal
   point character when using Decimal/Scientific character filter. (#6719, #2278) [@adamsepp]
 - ColorEdit, ColorPicker: Manipulating options popup don't mark item as edited. (#6722)
